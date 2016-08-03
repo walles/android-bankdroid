@@ -48,6 +48,7 @@ final public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
+        db.execSQL(Database.TABLE_CONNECTION);
         db.execSQL(LegacyDatabase.TABLE_BANKS);
         db.execSQL(LegacyDatabase.TABLE_ACCOUNTS);
         db.execSQL(LegacyDatabase.TABLE_TRANSACTIONS);
@@ -76,6 +77,15 @@ final public class DatabaseHelper extends SQLiteOpenHelper {
                 db.beginTransaction();
                 db.execSQL(Database.TABLE_CONNECTION_PROPERTIES);
                 migrateProperties(db);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+        }
+        if(oldVersion <= 12) {
+            try {
+                db.beginTransaction();
+                db.execSQL(Database.TABLE_CONNECTION);
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
