@@ -18,6 +18,7 @@ package com.liato.bankdroid.db;
 
 import com.liato.bankdroid.banking.Account;
 import com.liato.bankdroid.banking.Bank;
+import com.liato.bankdroid.banking.LegacyBankHelper;
 import com.liato.bankdroid.banking.LegacyProviderConfiguration;
 import com.liato.bankdroid.banking.Transaction;
 
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+
+import static com.liato.bankdroid.banking.LegacyBankHelper.legacyAccountIdOf;
 
 
 public class DBAdapter {
@@ -187,11 +190,12 @@ public class DBAdapter {
 
             ArrayList<Account> accounts = bank.getAccounts();
             for (Account acc : accounts) {
+                String accountId = legacyAccountIdOf(bankId, acc.getId());
                 ContentValues vals = new ContentValues();
                 vals.put("bankid", bankId);
                 vals.put("balance", acc.getBalance().toPlainString());
                 vals.put("name", acc.getName());
-                vals.put("id", new Long(bankId).toString() + "_" + acc.getId());
+                vals.put("id", accountId);
                 vals.put("hidden", acc.isHidden() ? 1 : 0);
                 vals.put("notify", acc.isNotify() ? 1 : 0);
                 vals.put("currency", acc.getCurrency());
@@ -201,14 +205,14 @@ public class DBAdapter {
                 if (acc.getAliasfor() == null || acc.getAliasfor().length() == 0) {
                     List<Transaction> transactions = acc.getTransactions();
                     if (transactions != null && !transactions.isEmpty()) {
-                        deleteTransactions(new Long(bankId).toString() + "_" + acc.getId());
+                        deleteTransactions(accountId);
                         for (Transaction transaction : transactions) {
                             ContentValues transvals = new ContentValues();
                             transvals.put("transdate", transaction.getDate());
                             transvals.put("btransaction", transaction.getTransaction());
                             transvals.put("amount", transaction.getAmount().toPlainString());
                             transvals.put("account",
-                                    new Long(bankId).toString() + "_" + acc.getId());
+                                    accountId);
                             transvals.put("currency", transaction.getCurrency());
                             mDb.insert("transactions", null, transvals);
                         }
