@@ -278,7 +278,7 @@ public class AutoRefreshService extends Service {
             if (banks.isEmpty()) {
                 return null;
             }
-            final DBAdapter db = new DBAdapter(AutoRefreshService.this);
+            final DBAdapter db = DBAdapter.create(AutoRefreshService.this);
             BigDecimal currentBalance;
             BigDecimal diff;
             BigDecimal minDelta = new BigDecimal(prefs.getString("notify_min_delta", "0"));

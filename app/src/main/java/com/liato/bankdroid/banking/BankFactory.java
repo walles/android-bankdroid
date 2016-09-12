@@ -45,8 +45,8 @@ public class BankFactory {
 
     public static Bank bankFromDb(long id, Context context, boolean loadAccounts) {
         Bank bank = null;
-        DBAdapter db = new DBAdapter(context);
         Cursor c = db.getBank(id);
+        DBAdapter db = DBAdapter.create(context);
 
         if (c != null && c.getCount() > 0) {
             try {
@@ -74,7 +74,7 @@ public class BankFactory {
 
     public static ArrayList<Bank> banksFromDb(Context context, boolean loadAccounts) {
         ArrayList<Bank> banks = new ArrayList<Bank>();
-        DBAdapter db = new DBAdapter(context);
+        DBAdapter db = DBAdapter.create(context);
         Cursor c = db.fetchBanks();
         if (c == null || c.getCount() == 0) {
             return banks;
@@ -105,7 +105,7 @@ public class BankFactory {
 
     public static Account accountFromDb(Context context, String accountId,
             boolean loadTransactions) {
-        DBAdapter db = new DBAdapter(context);
+        DBAdapter db = DBAdapter.create(context);
         Cursor c = db.getAccount(accountId);
 
         if (c == null || c.isClosed() || (c.isBeforeFirst() && c.isAfterLast())) {
@@ -146,7 +146,7 @@ public class BankFactory {
 
     public static ArrayList<Account> accountsFromDb(Context context, long bankId) {
         ArrayList<Account> accounts = new ArrayList<Account>();
-        DBAdapter db = new DBAdapter(context);
+        DBAdapter db = DBAdapter.create(context);
         Cursor c = db.fetchAccounts(bankId);
         if (c == null || c.getCount() == 0) {
             return accounts;
@@ -174,7 +174,7 @@ public class BankFactory {
 
     private static Map<String, String> loadProperties(long id, Context context) {
         Map<String, String> properties = new HashMap<>();
-        DBAdapter db = new DBAdapter(context);
+        DBAdapter db = DBAdapter.create(context);
         Cursor c = db.fetchProperties(Long.toString(id));
         if(c == null || c.getCount() == 0) {
             return properties;

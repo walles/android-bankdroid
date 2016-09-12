@@ -53,7 +53,7 @@ public class DBAdapter {
      *
      * @param ctx the Context within which to work
      */
-    public DBAdapter(Context ctx) {
+    DBAdapter(Context ctx) {
         mDbHelper = DatabaseHelper.getHelper(ctx);
         mDb = mDbHelper.getWritableDatabase();
     }
@@ -63,7 +63,7 @@ public class DBAdapter {
      */
     @Deprecated
     public static void save(Bank bank, Context context) {
-        DBAdapter db = new DBAdapter(context);
+        DBAdapter db = DBAdapter.create(context);
         long id = db.updateBank(bank);
 
         bank.setDbid(id);
@@ -74,7 +74,7 @@ public class DBAdapter {
      */
     @Deprecated
     public static void disable(Bank bank, Context context) {
-        DBAdapter db = new DBAdapter(context);
+        DBAdapter db = DBAdapter.create(context);
         db.disableBank(bank.getDbId());
     }
 
@@ -255,5 +255,9 @@ public class DBAdapter {
             c.moveToFirst();
         }
         return c;
+    }
+
+    public static DBAdapter create(Context context) {
+        return new DBAdapter(context);
     }
 }
