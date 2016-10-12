@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
 
 import eu.nullbyte.android.urllib.CertificateReader;
 import eu.nullbyte.android.urllib.Urllib;
+import timber.log.Timber;
 
 public class SEB extends Bank {
 
@@ -167,10 +168,8 @@ public class SEB extends Bank {
                     e, true);
             hr.getEntity().getContent();
 
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (JsonProcessingException e1) {
-            e1.printStackTrace();
+        } catch (UnsupportedEncodingException | JsonProcessingException e) {
+            Timber.w(e, "SEB: Error contacting bank");
         }
 
 //        {
