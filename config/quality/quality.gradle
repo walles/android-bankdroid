@@ -7,10 +7,21 @@ final isAndroid = (
         project.plugins.hasPlugin("com.android.application") ||
                 project.plugins.hasPlugin("com.android.library"))
 
+if (isAndroid) {
+    // These are automatically added for Java projects
+    task checkstyleMain(type: Checkstyle) {
+        source 'src/main'
+        check.dependsOn 'checkstyleMain'
+    }
+    task checkstyleTest(type: Checkstyle) {
+        source 'src/test'
+        check.dependsOn 'checkstyleTest'
+    }
+}
+
 tasks.withType(Checkstyle) {
     configFile rootProject.file("${configDir}/checkstyle/checkstyle.xml")
 
-    source 'src'
     include '**/*.java'
     classpath = files()
 

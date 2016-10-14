@@ -21,6 +21,7 @@
     the console output or the HTML report and remedy them until the build passes.
     -->
     <rule ref="rulesets/java/android.xml" />
+    <rule ref="rulesets/java/braces.xml" />
 
     <rule ref="rulesets/java/logging-java.xml" />
 </ruleset>
