@@ -3,6 +3,8 @@ apply plugin: 'java'
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
+apply from: '../config/quality/quality.gradle'
+
 dependencies {
     compile 'joda-time:joda-time:2.8.2'
     testCompile 'junit:junit:4.12'
