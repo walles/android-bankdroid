@@ -18,7 +18,6 @@ if (isAndroid) {
         check.dependsOn 'checkstyleTest'
     }
 }
-
 tasks.withType(Checkstyle) {
     configFile rootProject.file("${configDir}/checkstyle/checkstyle.xml")
 
@@ -87,13 +86,23 @@ tasks.withType(FindBugs) {
     dependsOn(isAndroid ? 'compileDebugSources' : 'compileJava')
 }
 
-task pmd(type: Pmd) {
+if (isAndroid) {
+    // These are automatically added for Java projects
+    task pmdMain(type: Checkstyle) {
+        source 'src/main'
+        check.dependsOn 'pmdMain'
+    }
+    task pmdTest(type: Checkstyle) {
+        source 'src/test'
+        check.dependsOn 'pmdTest'
+    }
+}
+tasks.withType(Pmd) {
     ruleSetFiles = files("${configDir}/pmd/pmd-ruleset.xml")
     ignoreFailures = false
     consoleOutput = true
     ruleSets = []
 
-    source 'src'
     include '**/*.java'
     exclude '**/generated/**'
 
@@ -106,11 +115,5 @@ task pmd(type: Pmd) {
         html {
             destination "$project.buildDir/reports/pmd/pmd.html"
         }
-    }
-
-    // For Java projects, the PMD plugin configures itself, but on Android
-    // we need to do it ourselves
-    if (isAndroid) {
-        check.dependsOn 'pmd'
     }
 }
