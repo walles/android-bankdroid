@@ -6,4 +6,6 @@ targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
 	compile project(':bankdroid-interface')
+
+	testCompile 'junit:junit:4.12'
 }
