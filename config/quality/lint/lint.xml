@@ -22,7 +22,6 @@
     <issue id="IconLocation" severity="ignore" />
     <issue id="IconMissingDensityFolder" severity="ignore" />
     <issue id="InefficientWeight" severity="ignore" />
-    <issue id="InflateParams" severity="ignore" />
     <issue id="InlinedApi" severity="ignore" />
     <issue id="InvalidPackage" severity="ignore" />
     <issue id="ManifestOrder" severity="ignore" />
