@@ -109,7 +109,6 @@
         <exclude name="UnnecessaryWrapperObjectCreation" />
         <exclude name="UnsynchronizedStaticDateFormatter" />
         <exclude name="UnusedLocalVariable" />
-        <exclude name="UnusedPrivateMethod" />
         <exclude name="UseCollectionIsEmpty" />
         <exclude name="UseConcurrentHashMap" />
         <exclude name="UseEqualsToCompareStrings" />
