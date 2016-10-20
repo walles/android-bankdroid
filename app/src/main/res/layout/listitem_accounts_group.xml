@@ -64,7 +64,7 @@
         android:shadowRadius="2"
         android:text="Personnummer"
         android:textColor="#000"
-        android:textSize="23dp"
+        android:textSize="23sp"
         tools:ignore="HardcodedText"/>
 
     <ImageView
