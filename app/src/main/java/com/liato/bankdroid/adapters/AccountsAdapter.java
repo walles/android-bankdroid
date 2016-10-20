@@ -84,11 +84,11 @@ public class AccountsAdapter extends BaseAdapter {
                         bank.getDecimalFormatter(),
                         false));
         icon.setImageResource(bank.getImageResource());
-        ImageView warning = (ImageView) convertView.findViewById(R.id.imgWarning);
+        View warning = convertView.findViewById(R.id.txtDisabledWarning);
         if (bank.isDisabled()) {
             warning.setVisibility(View.VISIBLE);
         } else {
-            warning.setVisibility(View.INVISIBLE);
+            warning.setVisibility(View.GONE);
         }
         return convertView;
     }
