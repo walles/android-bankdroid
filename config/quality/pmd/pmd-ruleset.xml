@@ -94,7 +94,6 @@
         <exclude name="SimplifyStartsWith" />
         <exclude name="SingularField" />
         <exclude name="StdCyclomaticComplexity" />
-        <exclude name="StringInstantiation" />
         <exclude name="SuspiciousConstantFieldName" />
         <exclude name="SwitchDensity" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
