@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layBankHeader"
     android:layout_width="fill_parent"
     android:layout_height="62dp"
@@ -36,9 +38,10 @@
         android:layout_toRightOf="@id/imgListitemAccountsGroup"
         android:ellipsize="marquee"
         android:gravity="top"
-        android:singleLine="true"
         android:text="Banknamn"
-        android:textColor="#000" />
+        android:textColor="#000"
+        tools:ignore="HardcodedText"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/txtListitemAccountsGroupAccountname"
@@ -61,7 +64,8 @@
         android:shadowRadius="2"
         android:text="Personnummer"
         android:textColor="#000"
-        android:textSize="23dp" />
+        android:textSize="23dp"
+        tools:ignore="HardcodedText"/>
 
     <ImageView
         android:id="@+id/imgWarning"
@@ -81,8 +85,9 @@
         android:layout_alignParentRight="true"
         android:ellipsize="marquee"
         android:gravity="top"
-        android:singleLine="true"
         android:text="00000 SEK"
-        android:textColor="#333" />
+        android:textColor="#333"
+        tools:ignore="HardcodedText"
+        android:maxLines="1"/>
 
 </RelativeLayout>

@@ -219,4 +219,5 @@
     <string name="error_bank_not_found">Den valda banken kunde inte hittas.</string>
     <string name="error_account_not_found">Det valda kontot kunde inte hittas.</string>
 	<string name="disabled_refresh_or_edit">Senaste uppdateringen misslyckades och vi har slutat uppdatera kontot automatiskt. Uppdatera kontot manuellt för att försöka igen eller ändra kontot och kontrollera dina inloggningsuppgifter.</string>
+	<string name="loading">Laddar…</string>
 </resources>

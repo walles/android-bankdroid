@@ -65,7 +65,7 @@
 				android:layout_width="wrap_content"
 				android:layout_centerInParent="false"
 				android:layout_centerHorizontal="true"
-				android:text="Loading..."
+				android:text="@string/loading"
 				android:textSize="27dp"
 				android:paddingRight="1dp"
 				android:paddingTop="8dp" />

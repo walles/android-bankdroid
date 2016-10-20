@@ -43,11 +43,11 @@ public class AccountsAdapter extends BaseAdapter {
 
     public final static int VIEWTYPE_EMPTY = 2;
 
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
 
     private ArrayList<Bank> banks;
 
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
     private boolean showHidden;
 

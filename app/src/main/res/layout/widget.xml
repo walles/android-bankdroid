@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_gravity="center_horizontal"
 	android:background="@drawable/widget_2x1"
 	android:layout_height="100dp"
@@ -36,7 +37,7 @@
 		android:inputType="none"
 		android:layout_marginLeft="2dp"
 		android:layout_marginRight="2dp"
-		android:text="Bankdroid"
+		android:text="@string/app_name"
 		android:lines="1"></TextView>
 	<TextView
 		android:id="@+id/txtWidgetAccountnameBlur"
@@ -48,7 +49,7 @@
 		android:inputType="none"
 		android:layout_marginLeft="2dp"
 		android:layout_marginRight="2dp"
-		android:text="Bankdroid"
+		android:text="@string/app_name"
 		android:lines="1"
 		android:visibility="gone"></TextView>
 	</LinearLayout>
@@ -78,7 +79,7 @@
 			android:textSize="15dp"
 			android:id="@+id/txtWidgetAccountbalance"
 			android:layout_height="fill_parent"
-			android:text="Loading..." />
+			android:text="@string/loading"/>
 	</LinearLayout>
 	<LinearLayout
 			android:layout_below="@+id/layWidgetRow02"
