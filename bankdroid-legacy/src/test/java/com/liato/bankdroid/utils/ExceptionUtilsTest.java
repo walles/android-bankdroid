@@ -14,15 +14,21 @@ public class ExceptionUtilsTest {
     @Test
     public void testBlameBankdroid() {
         Exception e = ExceptionFactory.getException();
-        String before = toStringWithStacktrace(e);
-
         ExceptionUtils.blameBankdroid(e);
         String after = toStringWithStacktrace(e);
 
-        FIXME: Verify that the ultimate cause's stack trace starts with a Bankdroid frame
         String[] afterLines = after.split("\n");
-
-        Assert.fail(after);
+        int lastCausedByIndex = 0;
+        for (int i = 0; i < afterLines.length; i++) {
+            if (afterLines[i].startsWith("Caused by: ")) {
+                lastCausedByIndex = i;
+            }
+        }
+        Assert.assertNotEquals(after, 0, lastCausedByIndex);
+        Assert.assertTrue(after,
+                afterLines[lastCausedByIndex + 1].startsWith("\tat com.liato.bankdroid."));
+        Assert.assertTrue(after,
+                afterLines[lastCausedByIndex - 1].contains("--- END OF ACTUAL EXCEPTION STACK ---"));
     }
 
     @Test
@@ -95,13 +101,5 @@ public class ExceptionUtilsTest {
         Assert.assertEquals(raw.getMessage(), cloned.getMessage());
         Assert.assertArrayEquals(raw.getStackTrace(), cloned.getStackTrace());
         Assert.assertEquals(raw.getClass(), cloned.getClass());
-    }
-
-    @Test(timeout = 1000)
-    public void testGetUltimateCauseRecursive() {
-        Exception recursive = new Exception();
-        Exception intermediate = new Exception(recursive);
-        recursive.initCause(intermediate);
-        Assert.assertNull(ExceptionUtils.getUltimateCause(recursive));
     }
 }
