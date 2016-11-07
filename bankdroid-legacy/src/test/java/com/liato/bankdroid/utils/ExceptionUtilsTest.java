@@ -3,17 +3,84 @@ package com.liato.bankdroid.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.ConnectException;
 
 import eu.nullbyte.android.urllib.Urllib;
-import not.bankdroid.at.all.ExceptionThrower;
+import not.bankdroid.at.all.ExceptionFactory;
 
-@SuppressWarnings("CallToPrintStackTrace")
 public class ExceptionUtilsTest {
     @Test
-    @SuppressWarnings("PMD") // This is for the stack trace printing, we really want to do it here
-    public void testBankdroidifyException() throws Exception {
-        Exception raw = null;
+    public void testBlameBankdroid() {
+        Exception e = ExceptionFactory.getException();
+        String before = toStringWithStacktrace(e);
+
+        ExceptionUtils.blameBankdroid(e);
+        String after = toStringWithStacktrace(e);
+
+        FIXME: Verify that the ultimate cause's stack trace starts with a Bankdroid frame
+        String[] afterLines = after.split("\n");
+
+        Assert.fail(after);
+    }
+
+    @Test
+    public void testBlameBankdroidAlreadyToBlame() {
+        // Creating it here we're already inside of Bankdroid code, blaming bankdroid should be a
+        // no-op
+        Exception e = new Exception();
+
+        String before = toStringWithStacktrace(e);
+
+        ExceptionUtils.blameBankdroid(e);
+        String after = toStringWithStacktrace(e);
+
+        Assert.assertEquals(before, after);
+    }
+
+    private String toStringWithStacktrace(Exception e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        printWriter.close();
+        return stringWriter.toString();
+    }
+
+    @Test
+    public void testBankdroidifyStacktrace() {
+        StackTraceElement[] bankdroidified = new StackTraceElement[] {
+                new StackTraceElement("not.bankdroid.SomeClass", "someMethod", "SomeClass.java", 42),
+                new StackTraceElement("com.liato.bankdroid.SomeOtherClass", "someOtherMethod", "SomeOtherClass.java", 43),
+        };
+        bankdroidified = ExceptionUtils.bankdroidifyStacktrace(bankdroidified);
+
+        StackTraceElement[] expected = new StackTraceElement[] {
+                new StackTraceElement("com.liato.bankdroid.SomeOtherClass", "someOtherMethod", "SomeOtherClass.java", 43),
+        };
+
+        Assert.assertArrayEquals(expected, bankdroidified);
+        Assert.assertArrayEquals(expected, ExceptionUtils.bankdroidifyStacktrace(bankdroidified));
+    }
+
+    @Test
+    public void testCloneExceptionWonky() {
+        ExceptionFactory.WonkyException raw = ExceptionFactory.getWonkyException();
+
+        @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+        ConnectException cloned = ExceptionUtils.cloneException(raw);
+
+        Assert.assertEquals(raw.getMessage(), cloned.getMessage());
+        Assert.assertArrayEquals(raw.getStackTrace(), cloned.getStackTrace());
+        Assert.assertEquals(
+                "Cloning an uninstantiable Exception should return an instance of its super class",
+                raw.getClass().getSuperclass(), cloned.getClass());
+    }
+
+    @Test
+    @SuppressWarnings({"PMD.AvoidCatchingNPE"})
+    public void testCloneExceptionNPE() {
+        NullPointerException raw = null;
         try {
             //noinspection ConstantConditions
             new Urllib(null);
@@ -22,66 +89,19 @@ public class ExceptionUtilsTest {
             raw = e;
         }
 
-        // Print stack traces, useful if the tests fail
-        System.err.println("Before:");
-        raw.printStackTrace();
+        @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+        NullPointerException cloned = ExceptionUtils.cloneException(raw);
 
-        System.err.println();
-        System.err.println("After:");
-        Exception bankdroidified = ExceptionUtils.bankdroidifyException(raw);
-        bankdroidified.printStackTrace();
-
-        Assert.assertFalse("Test setup: Top frame of initial exception shouldn't be in Bankdroid",
-                raw.getStackTrace()[0].getClassName().startsWith("com.liato.bankdroid."));
-
-        Assert.assertTrue("Top frame of bankdroidified exception should be in Bankdroid",
-                bankdroidified.getStackTrace()[0].getClassName().startsWith("com.liato.bankdroid."));
-
-        // Verify that e is the cause of bankdroidified
-        Assert.assertSame(raw, bankdroidified.getCause());
-
-        // Verify that re-bankdroidifying is a no-op
-        Assert.assertSame(bankdroidified, ExceptionUtils.bankdroidifyException(bankdroidified));
+        Assert.assertEquals(raw.getMessage(), cloned.getMessage());
+        Assert.assertArrayEquals(raw.getStackTrace(), cloned.getStackTrace());
+        Assert.assertEquals(raw.getClass(), cloned.getClass());
     }
 
-    /**
-     * Test that we can wrap exceptions without (String) constructors.
-     */
-    @Test
-    @SuppressWarnings("PMD") // This is for the stack trace printing, we really want to do it here
-    public void testBankdroidifyWonkyException() {
-        ExceptionThrower.WonkyException raw = null;
-        try {
-            ExceptionThrower.throwWonkyException();
-            Assert.fail("Exception expected");
-        } catch (ExceptionThrower.WonkyException e) {
-            raw = e;
-        }
-
-        // Print stack traces, useful if the tests fail
-        System.err.println("Before:");
-        raw.printStackTrace();
-
-        // Since bankdroidify() won't be able to create a WonkyException, it
-        // should fall back to creating something it extends
-        ConnectException bankdroidified = ExceptionUtils.bankdroidifyException(raw);
-
-        System.err.println();
-        System.err.println("After:");
-        bankdroidified.printStackTrace();
-
-        Assert.assertFalse("Test setup: Top frame of initial exception shouldn't be in Bankdroid",
-                raw.getStackTrace()[0].getClassName().startsWith("com.liato.bankdroid."));
-
-        Assert.assertTrue("Top frame of bankdroidified exception should be in Bankdroid",
-                bankdroidified.getStackTrace()[0].getClassName().startsWith("com.liato.bankdroid."));
-
-        Assert.assertEquals(raw.getMessage(), bankdroidified.getMessage());
-
-        // Verify that e is the cause of bankdroidified
-        Assert.assertSame(raw, bankdroidified.getCause());
-
-        // Verify that re-bankdroidifying is a no-op
-        Assert.assertSame(bankdroidified, ExceptionUtils.bankdroidifyException(bankdroidified));
+    @Test(timeout = 1000)
+    public void testGetUltimateCauseRecursive() {
+        Exception recursive = new Exception();
+        Exception intermediate = new Exception(recursive);
+        recursive.initCause(intermediate);
+        Assert.assertNull(ExceptionUtils.getUltimateCause(recursive));
     }
 }
