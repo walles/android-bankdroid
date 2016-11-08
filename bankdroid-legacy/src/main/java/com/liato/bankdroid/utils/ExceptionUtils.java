@@ -11,43 +11,60 @@ import timber.log.Timber;
 public class ExceptionUtils {
     private static final String PREFIX = "com.liato.bankdroid.";
 
+    private static final StackTraceElement[] SEPARATOR = new StackTraceElement[]{
+            new StackTraceElement("--- END OF ACTUAL EXCEPTION STACK ---", "", null, -1)
+    };
+
     /**
      * Make it look as if Bankdroid was the ultimate cause of this exception.
      *
      * @param t This exception will be modified to look as if Bankdroid caused it
      */
     public static void blameBankdroid(Throwable t) {
-        Throwable ultimateCause = getUltimateCause(t);
-        if (ultimateCause == null) {
-            Timber.w(new RuntimeException(t),
-                    "Unable to find ultimate cause for %s", t.getClass());
-            return;
-        }
-
         StackTraceElement[] bankdroidifiedStacktrace =
-                bankdroidifyStacktrace(ultimateCause.getStackTrace());
-        if (bankdroidifiedStacktrace.length == ultimateCause.getStackTrace().length) {
+                bankdroidifyStacktrace(t.getStackTrace());
+        if (bankdroidifiedStacktrace.length == t.getStackTrace().length) {
             // Unable to bankdroidify stacktrace => already done
             return;
         }
 
         Throwable fakeCause = cloneException(t);
         if (fakeCause == null) {
-            Timber.w("Unable to clone Exception of type %s", t.getClass());
+            String message = String.format("Unable to clone Exception of type %s", t.getClass());
+            Timber.w(new Exception(message), "%s", message);
             return;
         }
         fakeCause.setStackTrace(bankdroidifiedStacktrace);
+        fakeCause.initCause(null);
 
-        ultimateCause.initCause(fakeCause);
-    }
-
-    @VisibleForTesting
-    static Throwable getUltimateCause(Throwable t) {
+        // Find the ultimate cause in the cause chain...
         Throwable ultimateCause = t;
         while (ultimateCause.getCause() != null) {
             ultimateCause = ultimateCause.getCause();
         }
-        return ultimateCause;
+
+        // ... and blame Bankdroid for what happened
+        ultimateCause.setStackTrace(concatArrays(
+                ultimateCause.getStackTrace(),
+                SEPARATOR
+        ));
+        ultimateCause.initCause(fakeCause);
+    }
+
+    // From: http://stackoverflow.com/a/784842/473672
+    @SafeVarargs
+    private static <T> T[] concatArrays(T[] first, T[]... rest) {
+        int totalLength = first.length;
+        for (T[] array : rest) {
+            totalLength += array.length;
+        }
+        T[] result = Arrays.copyOf(first, totalLength);
+        int offset = first.length;
+        for (T[] array : rest) {
+            System.arraycopy(array, 0, result, offset, array.length);
+            offset += array.length;
+        }
+        return result;
     }
 
     /**

@@ -31,6 +31,42 @@ public class ExceptionUtilsTest {
                 afterLines[lastCausedByIndex - 1].contains("--- END OF ACTUAL EXCEPTION STACK ---"));
     }
 
+    /**
+     * Like {@link #testBlameBankdroid()} but with an Exception with a cause.
+     */
+    @Test
+    public void testBlameBankdroidWithCause() {
+        Exception e = ExceptionFactory.getExceptionWithCause();
+        ExceptionUtils.blameBankdroid(e);
+        String after = toStringWithStacktrace(e);
+
+        String[] afterLines = after.split("\n");
+        int firstCausedByIndex = 0;
+        for (int i = 0; i < afterLines.length; i++) {
+            if (afterLines[i].startsWith("Caused by: ")) {
+                firstCausedByIndex = i;
+                break;
+            }
+        }
+        Assert.assertNotEquals(after, 0, firstCausedByIndex);
+        Assert.assertFalse(after,
+                afterLines[firstCausedByIndex - 1].contains("--- END OF ACTUAL EXCEPTION STACK ---"));
+        Assert.assertTrue(after,
+                afterLines[firstCausedByIndex + 1].startsWith("\tat not.bankdroid.at.all."));
+
+        int lastCausedByIndex = 0;
+        for (int i = 0; i < afterLines.length; i++) {
+            if (afterLines[i].startsWith("Caused by: ")) {
+                lastCausedByIndex = i;
+            }
+        }
+        Assert.assertNotEquals(after, 0, lastCausedByIndex);
+        Assert.assertTrue(after,
+                afterLines[lastCausedByIndex - 1].contains("--- END OF ACTUAL EXCEPTION STACK ---"));
+        Assert.assertTrue(after,
+                afterLines[lastCausedByIndex + 1].startsWith("\tat com.liato.bankdroid."));
+    }
+
     @Test
     public void testBlameBankdroidAlreadyToBlame() {
         // Creating it here we're already inside of Bankdroid code, blaming bankdroid should be a

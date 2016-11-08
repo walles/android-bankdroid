@@ -17,6 +17,10 @@ public class ExceptionFactory {
     }
 
     public static Exception getException() {
-        return new Exception("message");
+        return new Exception("This is a test Exception");
+    }
+
+    public static Exception getExceptionWithCause() {
+        return new Exception("This Exception has a cause", getException());
     }
 }
