@@ -112,6 +112,7 @@ public class ExceptionUtilsTest {
         @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
         ConnectException cloned = ExceptionUtils.cloneException(raw);
 
+        assert cloned != null;
         Assert.assertEquals(raw.getMessage(), cloned.getMessage());
         Assert.assertArrayEquals(raw.getStackTrace(), cloned.getStackTrace());
         Assert.assertEquals(
@@ -134,6 +135,7 @@ public class ExceptionUtilsTest {
         @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
         NullPointerException cloned = ExceptionUtils.cloneException(raw);
 
+        assert cloned != null;
         Assert.assertEquals(raw.getMessage(), cloned.getMessage());
         Assert.assertArrayEquals(raw.getStackTrace(), cloned.getStackTrace());
         Assert.assertEquals(raw.getClass(), cloned.getClass());
