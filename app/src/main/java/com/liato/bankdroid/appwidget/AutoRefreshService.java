@@ -16,19 +16,6 @@
 
 package com.liato.bankdroid.appwidget;
 
-import com.liato.bankdroid.Helpers;
-import com.liato.bankdroid.MainActivity;
-import com.liato.bankdroid.R;
-import com.liato.bankdroid.banking.Account;
-import com.liato.bankdroid.banking.Bank;
-import com.liato.bankdroid.banking.BankFactory;
-import com.liato.bankdroid.banking.exceptions.BankChoiceException;
-import com.liato.bankdroid.banking.exceptions.BankException;
-import com.liato.bankdroid.banking.exceptions.LoginException;
-import com.liato.bankdroid.db.DBAdapter;
-import com.liato.bankdroid.liveview.LiveViewService;
-import com.liato.bankdroid.utils.LoggingUtils;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
@@ -47,6 +34,19 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+
+import com.liato.bankdroid.Helpers;
+import com.liato.bankdroid.MainActivity;
+import com.liato.bankdroid.R;
+import com.liato.bankdroid.banking.Account;
+import com.liato.bankdroid.banking.Bank;
+import com.liato.bankdroid.banking.BankFactory;
+import com.liato.bankdroid.banking.exceptions.BankChoiceException;
+import com.liato.bankdroid.banking.exceptions.BankException;
+import com.liato.bankdroid.banking.exceptions.LoginException;
+import com.liato.bankdroid.db.DBAdapter;
+import com.liato.bankdroid.liveview.LiveViewService;
+import com.liato.bankdroid.utils.LoggingUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class AutoRefreshService extends Service {
         }
 
         String text = String.format("%s: %s%s", account.getName(),
-                ((diff.compareTo(new BigDecimal(0)) == 1) ? "+" : ""),
+                ((diff.compareTo(BigDecimal.ZERO) == 1) ? "+" : ""),
                 Helpers.formatBalance(diff, account.getCurrency()));
         if (!prefs.getBoolean("notify_delta_only", false)) {
             text = String.format("%s (%s)", text,
@@ -329,7 +329,7 @@ public class AutoRefreshService extends Service {
                         refreshWidgets = true;
                     }
 
-                    if (diff.compareTo(new BigDecimal(0)) != 0
+                    if (diff.compareTo(BigDecimal.ZERO) != 0
                             && diff.abs().compareTo(minDelta) != -1) {
                         Account oldAccount;
                         for (final Account account : bank.getAccounts()) {
@@ -424,7 +424,7 @@ public class AutoRefreshService extends Service {
                         + ":\n");
                 for (final String err : errors) {
                     errormsg.append(err);
-                    errormsg.append("\n");
+                    errormsg.append('\n');
                 }
             }
             Editor edit = prefs.edit();

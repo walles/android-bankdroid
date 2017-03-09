@@ -16,13 +16,7 @@
 
 package com.liato.bankdroid;
 
-import com.liato.bankdroid.banking.Bank;
-import com.liato.bankdroid.banking.Bank.SessionPackage;
-import com.liato.bankdroid.banking.BankFactory;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.CookieStore;
-import org.apache.http.cookie.Cookie;
+import static android.graphics.Color.WHITE;
 
 import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
@@ -38,12 +32,18 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.liato.bankdroid.banking.Bank;
+import com.liato.bankdroid.banking.Bank.SessionPackage;
+import com.liato.bankdroid.banking.BankFactory;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.CookieStore;
+import org.apache.http.cookie.Cookie;
+
 import java.io.IOException;
 
 import eu.nullbyte.android.urllib.Urllib;
 import timber.log.Timber;
-
-import static android.graphics.Color.WHITE;
 
 public class WebViewActivity extends LockableActivity implements OnClickListener {
 
@@ -76,12 +76,10 @@ public class WebViewActivity extends LockableActivity implements OnClickListener
 
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
-//                activity.setProgressBar(progress);
                 if (progress == 100) {
                     Handler handler = new Handler();
                     Runnable runnable = new Runnable() {
                         public void run() {
-//                            activity.hideProgressBar();
                             if (mFirstPageLoaded) {
                                 mWebView.setBackgroundColor(WHITE);
                             }
@@ -89,9 +87,6 @@ public class WebViewActivity extends LockableActivity implements OnClickListener
                     };
                     // Let the progress bar hit 100% before we hide it.
                     handler.postDelayed(runnable, 100);
-
-                } else if (mFirstPageLoaded) {
-//                    activity.showProgressBar();
                 }
             }
         });

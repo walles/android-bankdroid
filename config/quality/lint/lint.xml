@@ -9,8 +9,6 @@
     <!-- FIXME: This file should be empty and all violations fixed. Then we will all hug. -->
 
     <issue id="AllowBackup" severity="ignore" />
-    <issue id="AlwaysShowAction" severity="ignore" />
-    <issue id="AppCompatResource" severity="ignore" />
     <issue id="BatteryLife" severity="ignore" />
     <issue id="ClickableViewAccessibility" severity="ignore" />
     <issue id="ContentDescription" severity="ignore" />
@@ -25,7 +23,6 @@
     <issue id="InefficientWeight" severity="ignore" />
     <issue id="InlinedApi" severity="ignore" />
     <issue id="InvalidPackage" severity="ignore" />
-    <issue id="ManifestOrder" severity="ignore" />
     <issue id="MergeRootFrame" severity="ignore" />
     <issue id="MissingTranslation" severity="ignore" />
     <issue id="NewApi" severity="ignore" />

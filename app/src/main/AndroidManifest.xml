@@ -2,6 +2,26 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.liato.bankdroid">
+	<uses-permission
+		android:name="android.permission.INTERNET" />
+	<uses-permission
+		android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission
+		android:name="android.permission.VIBRATE" />
+	<uses-permission
+		android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission
+		android:name="com.sonyericsson.extras.liveview.permission.LIVEVIEW_API" />
+	<supports-screens
+		android:largeScreens="true"
+		android:normalScreens="true"
+		android:smallScreens="true"
+		android:anyDensity="true" />
+	<permission
+		android:name="com.liato.bankdroid.permission.READ_ACCESS_BANK_TRANSACTIONS"
+		android:label="@string/permission_provider_label"
+		android:description="@string/permission_provider_desc"
+		android:protectionLevel="dangerous" />
 	<application
         android:name="com.liato.bankdroid.BankdroidApplication"
 		android:icon="@drawable/ic_launcher"
@@ -162,24 +182,4 @@
 			</intent-filter>
 		</activity>
 	</application>
-	<uses-permission
-		android:name="android.permission.INTERNET" />
-	<uses-permission
-		android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission
-		android:name="android.permission.VIBRATE" />
-	<uses-permission
-		android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission
-		android:name="com.sonyericsson.extras.liveview.permission.LIVEVIEW_API" />
-	<supports-screens
-		android:largeScreens="true"
-		android:normalScreens="true"
-		android:smallScreens="true"
-		android:anyDensity="true" />
-	<permission
-		android:name="com.liato.bankdroid.permission.READ_ACCESS_BANK_TRANSACTIONS"
-		android:label="@string/permission_provider_label"
-		android:description="@string/permission_provider_desc"
-		android:protectionLevel="dangerous" />
-</manifest> 
+</manifest>

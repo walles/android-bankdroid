@@ -128,7 +128,6 @@
         <exclude name="UnusedLocalVariable" />
         <exclude name="UseCollectionIsEmpty" />
         <exclude name="UseConcurrentHashMap" />
-        <exclude name="UseEqualsToCompareStrings" />
         <exclude name="UseIndexOfChar" />
         <exclude name="UseLocaleWithCaseConversions" />
         <exclude name="UseObjectForClearerAPI" />

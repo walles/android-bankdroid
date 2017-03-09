@@ -16,17 +16,6 @@
 
 package com.liato.bankdroid;
 
-import com.liato.bankdroid.appwidget.AutoRefreshService;
-import com.liato.bankdroid.banking.Account;
-import com.liato.bankdroid.banking.Bank;
-import com.liato.bankdroid.banking.BankFactory;
-import com.liato.bankdroid.banking.exceptions.BankChoiceException;
-import com.liato.bankdroid.banking.exceptions.BankException;
-import com.liato.bankdroid.banking.exceptions.LoginException;
-import com.liato.bankdroid.db.DBAdapter;
-import com.liato.bankdroid.utils.LoggingUtils;
-import com.liato.bankdroid.utils.NetworkUtils;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -37,6 +26,17 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.liato.bankdroid.appwidget.AutoRefreshService;
+import com.liato.bankdroid.banking.Account;
+import com.liato.bankdroid.banking.Bank;
+import com.liato.bankdroid.banking.BankFactory;
+import com.liato.bankdroid.banking.exceptions.BankChoiceException;
+import com.liato.bankdroid.banking.exceptions.BankException;
+import com.liato.bankdroid.banking.exceptions.LoginException;
+import com.liato.bankdroid.db.DBAdapter;
+import com.liato.bankdroid.utils.LoggingUtils;
+import com.liato.bankdroid.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -191,7 +191,7 @@ public class DataRetrieverTask extends AsyncTask<String, String, Void> {
                     .append(":\n");
             for (final String err : errors) {
                 errormsg.append(err);
-                errormsg.append("\n");
+                errormsg.append('\n');
             }
             final AlertDialog.Builder builder = new AlertDialog.Builder(parent);
             builder.setMessage(errormsg.toString())
